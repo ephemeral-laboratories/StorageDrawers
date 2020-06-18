@@ -1,5 +1,7 @@
 package com.jaquadro.minecraft.storagedrawers.client.renderer;
 
+import java.text.NumberFormat;
+
 import com.jaquadro.minecraft.storagedrawers.inventory.ItemStackHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -107,16 +109,10 @@ public class StorageRenderItem extends RenderItem
 
             if (stackSize >= 0 || text != null)
             {
-                if (stackSize >= 100000000 || (stackSize >= 1000000 && font.getUnicodeFlag()))
-                    text = (text == null) ? String.format("%.0fM", stackSize / 1000000f) : text;
-                else if (stackSize >= 1000000)
-                    text = (text == null) ? String.format("%.1fM", stackSize / 1000000f) : text;
-                else if (stackSize >= 100000 || (stackSize >= 10000 && font.getUnicodeFlag()))
-                    text = (text == null) ? String.format("%.0fK", stackSize / 1000f) : text;
-                else if (stackSize >= 10000)
-                    text = (text == null) ? String.format("%.1fK", stackSize / 1000f) : text;
-                else
-                    text = (text == null) ? String.valueOf(stackSize) : text;
+                if (text == null)
+                {
+                    text = CountFormatter.formatQuantity(font, text, stackSize);
+                }
 
                 int textX = (int)((x + 16 + xoff - font.getStringWidth(text) * scale) / scale) - 1;
                 int textY = (int)((y + 16 - 7 * scale) / scale) - 1;
